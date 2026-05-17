@@ -4,6 +4,9 @@
 #include "../include/mem.h"
 #include "../include/sched.h"
 #include "../include/shell.h"
+#include "../include/mmu.h"
+#include "../include/timer.h"
+#include "../include/gpio.h"
 
 void kernel_main() {
     uart_init();
@@ -31,8 +34,15 @@ void kernel_main() {
     mem_init();
     printf("[OK] Memory manager\n");
 
+    mmu_init();
+    printf("[OK] MMU\n");
+
     sched_init();
     printf("[OK] Scheduler\n");
+
+    gpio_init(17, 1);
+    gpio_set(17);
+    printf("[OK] GPIO - LED aprins pe pin 17\n");
 
     shell_init();
 
