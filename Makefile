@@ -6,8 +6,8 @@ OBJCOPY = aarch64-linux-gnu-objcopy
 CFLAGS  = -ffreestanding -nostdinc -nostdlib -nostartfiles -Iinclude
 LDFLAGS = -nostdlib -nostartfiles
 
-SRC_C   = kernel/uart.c kernel/printf.c kernel/kernel.c
-SRC_S   = boot/start.S
+SRC_C   = kernel/uart.c kernel/printf.c kernel/irq.c kernel/mem.c kernel/kernel.c
+SRC_S   = boot/start.S boot/irq.S
 
 OBJ     = $(SRC_S:.S=.o) $(SRC_C:.c=.o)
 
