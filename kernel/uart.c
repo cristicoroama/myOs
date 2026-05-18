@@ -1,6 +1,6 @@
 #include "../include/uart.h"
 
-#define MMIO_BASE       0x3F000000
+#define MMIO_BASE       0x3F000000UL
 
 #define GPIO_BASE       (MMIO_BASE + 0x200000)
 #define GPFSEL1         ((volatile unsigned int*)(GPIO_BASE + 0x04))
@@ -17,9 +17,7 @@
 #define UART0_IMSC      ((volatile unsigned int*)(UART0_BASE + 0x38))
 
 static void delay(int count) {
-    while (count--) {
-        asm volatile("nop");
-    }
+    while (count--) asm volatile("nop");
 }
 
 void uart_init() {
@@ -38,14 +36,11 @@ void uart_init() {
     delay(150);
     *GPPUDCLK0 = 0;
 
-    *UART0_IBRD = 1;
-    *UART0_FBRD = 40;
+    *UART0_IBRD = 26;
+    *UART0_FBRD = 3;
 
     *UART0_LCRH = (1 << 4) | (1 << 5) | (1 << 6);
-
-    *UART0_IMSC = (1 << 1) | (1 << 4) | (1 << 5) | (1 << 6) |
-                  (1 << 7) | (1 << 8) | (1 << 9) | (1 << 10);
-
+    *UART0_IMSC = 0;
     *UART0_CR = (1 << 0) | (1 << 8) | (1 << 9);
 }
 
@@ -61,9 +56,7 @@ char uart_getc() {
 
 void uart_puts(const char* str) {
     while (*str) {
-        if (*str == '\n') {
-            uart_putc('\r');
-        }
+        if (*str == '\n') uart_putc('\r');
         uart_putc(*str++);
     }
 }

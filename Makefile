@@ -1,10 +1,9 @@
 CC      = aarch64-linux-gnu-gcc
-AS      = aarch64-linux-gnu-as
 LD      = aarch64-linux-gnu-ld
 OBJCOPY = aarch64-linux-gnu-objcopy
 
-CFLAGS  = -ffreestanding -nostdinc -nostdlib -nostartfiles -Iinclude
-LDFLAGS = -nostdlib -nostartfiles
+CFLAGS  = -ffreestanding -nostdinc -nostdlib -nostartfiles -Iinclude -Wno-int-to-pointer-cast
+LDFLAGS = -nostdlib
 
 SRC_C   = kernel/uart.c \
           kernel/printf.c \
@@ -17,6 +16,11 @@ SRC_C   = kernel/uart.c \
           kernel/mmu.c \
           kernel/syscall.c \
           kernel/sched.c \
+          kernel/fs.c \
+          kernel/process.c \
+          kernel/keyboard.c \
+          kernel/font.c \
+          kernel/display.c \
           kernel/shell.c \
           kernel/kernel.c
 
@@ -40,6 +44,3 @@ kernel8.img: kernel8.elf
 
 clean:
 	rm -f $(OBJ) kernel8.elf kernel8.img
-
-qemu:
-	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -serial stdio -display none
